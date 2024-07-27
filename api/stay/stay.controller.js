@@ -4,9 +4,13 @@ import { stayService } from './stay.service.js'
 export async function getStays(req, res) {
 	try {
 		// const filterBy = {
-		// 	txt: req.query.txt || ''
+		// 	txt: req.query.txt || '',
+		// 	label: req.query.label || [],
+		// 	guest: +req.query.guest || 1
 		// }
+		// logger.debug('Getting Stays', filterBy)
 		// const stays = await stayService.query(filterBy)
+
 		const stays = await stayService.query()
 		res.json(stays)
 	} catch (err) {
@@ -42,12 +46,12 @@ export async function addStay(req, res) {
 export async function updateStay(req, res) {
 	// const { loggedinUser, body: stay } = req
 	const stay = req.body
-    // const { _id: userId, isAdmin } = loggedinUser
-console.log('stay:', stay)
-    // if(!isAdmin && stay.host._id !== userId) {
-    //     res.status(403).send('Not your stay...')
-    //     return
-    // }
+	// const { _id: userId, isAdmin } = loggedinUser
+	console.log('stay:', stay)
+	// if(!isAdmin && stay.host._id !== userId) {
+	//     res.status(403).send('Not your stay...')
+	//     return
+	// }
 
 	try {
 		const updatedStay = await stayService.update(stay)

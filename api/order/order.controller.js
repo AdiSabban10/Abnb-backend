@@ -7,9 +7,7 @@ import { orderService } from './order.service.js'
 export async function getOrders(req, res) {
 	try {
 		const orders = await orderService.query()
-		// const orders = await orderService.query(req.query)
 		res.json(orders)
-		// res.send(orders)
 	} catch (err) {
 		logger.error('Cannot get orders', err)
 		res.status(400).send({ err: 'Failed to get orders' })
@@ -31,7 +29,7 @@ export async function addOrder(req, res) {
 	const { loggedinUser, body: order } = req
 
 	try {
-		// order.guest = loggedinUser
+		order.guest = loggedinUser
 		const addedOrder = await orderService.add(order)
 		res.json(addedOrder)
 	} catch (err) {

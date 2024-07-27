@@ -8,7 +8,7 @@ import { authRoutes } from './api/auth/auth.routes.js'
 import { userRoutes } from './api/user/user.routes.js'
 import { orderRoutes } from './api/order/order.routes.js'
 import { stayRoutes } from './api/stay/stay.routes.js'
-import { setupSocketAPI } from './services/socket.service.js'
+// import { setupSocketAPI } from './services/socket.service.js'
 
 import { setupAsyncLocalStorage } from './middlewares/setupAls.middleware.js'
 
@@ -19,9 +19,9 @@ const app = express()
 app.use(cookieParser())
 app.use(express.json())
 
-// if (process.env.NODE_ENV === 'production') {
-//     app.use(express.static(path.resolve('public')))
-// } else {
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.resolve('public')))
+} else {
     const corsOptions = {
         origin: [   'http://127.0.0.1:3000',
                     'http://localhost:3000',
@@ -31,8 +31,8 @@ app.use(express.json())
         credentials: true
     }
     app.use(cors(corsOptions))
-// }
-// app.all('*', setupAsyncLocalStorage)
+}
+app.all('*', setupAsyncLocalStorage)
 
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
@@ -46,9 +46,9 @@ app.use('/api/stay', stayRoutes)
 // it will still serve the index.html file
 // and allow vue/react-router to take it from there
 
-// app.get('/**', (req, res) => {
-//     res.sendFile(path.resolve('public/index.html'))
-// })
+app.get('/**', (req, res) => {
+    res.sendFile(path.resolve('public/index.html'))
+})
 
 import { logger } from './services/logger.service.js'
 const port = process.env.PORT || 3030
