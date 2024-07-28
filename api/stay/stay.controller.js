@@ -14,7 +14,6 @@ export async function getStays(req, res) {
 
 		logger.debug('Getting Stays', filterBy)
 		const stays = await stayService.query(filterBy)
-
 		// const stays = await stayService.query()
 		res.json(stays)
 	} catch (err) {

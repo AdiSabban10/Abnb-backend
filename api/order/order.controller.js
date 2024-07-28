@@ -6,7 +6,13 @@ import { orderService } from './order.service.js'
 
 export async function getOrders(req, res) {
 	try {
-		const orders = await orderService.query()
+		const filterBy = {
+            guestId: req.query.guestId || '',
+            hostId: req.query.hostId || ''
+        }
+
+        const orders = await orderService.query(filterBy)
+		// const orders = await orderService.query()
 		res.json(orders)
 	} catch (err) {
 		logger.error('Cannot get orders', err)

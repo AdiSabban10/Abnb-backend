@@ -21,19 +21,11 @@ async function query(filterBy = { txt: '' }) {
 	// async function query() {
 	try {
 		const criteria = _buildCriteria(filterBy)
-		// const sort = _buildSort(filterBy)
 
 		const collection = await dbService.getCollection('stay')
 		var stayCursor = await collection.find(criteria)
 		// const stayCursor = await collection.find({}) 
-		// var stayCursor = await collection.find(criteria, { sort })
-
-		// if (filterBy.pageIdx !== undefined) {
-		// 	stayCursor.skip(filterBy.pageIdx * PAGE_SIZE).limit(PAGE_SIZE)
-		// }
-
 		const stays = await stayCursor.toArray() //
-		// const stays = stayCursor.toArray()
 		return stays
 	} catch (err) {
 		logger.error('cannot find stays', err)
