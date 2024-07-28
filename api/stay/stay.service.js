@@ -17,15 +17,15 @@ export const stayService = {
 	// removeStayMsg,
 }
 
-// async function query(filterBy = { txt: '' }) {
-	async function query() {
+async function query(filterBy = { txt: '' }) {
+	// async function query() {
 	try {
-		// const criteria = _buildCriteria(filterBy)
+		const criteria = _buildCriteria(filterBy)
 		// const sort = _buildSort(filterBy)
 
 		const collection = await dbService.getCollection('stay')
-		// var stayCursor = await collection.find(criteria)
-		const stayCursor = await collection.find({}) 
+		var stayCursor = await collection.find(criteria)
+		// const stayCursor = await collection.find({}) 
 		// var stayCursor = await collection.find(criteria, { sort })
 
 		// if (filterBy.pageIdx !== undefined) {
@@ -149,23 +149,33 @@ async function update(stay) {
 
 
 function _buildCriteria(filterBy) {
-	const { txt, label, guest } = filterBy
-	const criteria = {};
+	const { txt, label, guest, type, minPrice, maxPrice } = filterBy
+	const criteria = {}
 
 	if (txt) {
 		criteria.$or = [
 			{ 'loc.country': { $regex: txt, $options: 'i' } },
 			{ 'loc.city': { $regex: txt, $options: 'i' } },
 			{ name: { $regex: txt, $options: 'i' } }
-		];
+		]
 	}
 
 	if (label) {
-		criteria.labels = { $in: [label] }
-	}
+        criteria.labels = { $in: [label] }
+    }
 
 	if (guest) {
-		criteria.capacity = { $gte: guest.capacity }
+		criteria.capacity = { $gte: guest }
+	}
+
+	if (type) {
+		criteria.type = type
+	}
+
+	if (minPrice || maxPrice) {
+		criteria.price = {}
+		if (minPrice) criteria.price.$gte = minPrice
+		if (maxPrice !== Infinity) criteria.price.$lte = maxPrice
 	}
 
 	return criteria

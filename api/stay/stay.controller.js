@@ -3,15 +3,19 @@ import { stayService } from './stay.service.js'
 
 export async function getStays(req, res) {
 	try {
-		// const filterBy = {
-		// 	txt: req.query.txt || '',
-		// 	label: req.query.label || [],
-		// 	guest: +req.query.guest || 1
-		// }
-		// logger.debug('Getting Stays', filterBy)
-		// const stays = await stayService.query(filterBy)
+		const filterBy = {
+			txt: req.query.txt || '',
+			label: req.query.label || '', 
+			guest: +req.query.guest || 0,
+			type: req.query.type || '',
+			minPrice: +req.query.minPrice || 0,
+			maxPrice: +req.query.maxPrice || Infinity,
+		}
 
-		const stays = await stayService.query()
+		logger.debug('Getting Stays', filterBy)
+		const stays = await stayService.query(filterBy)
+
+		// const stays = await stayService.query()
 		res.json(stays)
 	} catch (err) {
 		logger.error('Failed to get stays', err)
