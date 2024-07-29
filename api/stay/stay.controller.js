@@ -5,21 +5,21 @@ export async function getStays(req, res) {
 	try {
 		const filterBy = {
 			txt: req.query.txt || '',
-			label: req.query.label || '', 
+			label: req.query.label || '',
 			guest: +req.query.guest || 0,
 			type: req.query.type || '',
 			minPrice: +req.query.minPrice || 0,
 			maxPrice: +req.query.maxPrice || Infinity,
-		}
+		};
+		const page = +req.query.page || 0;
 
-		logger.debug('Getting Stays', filterBy)
-		const stays = await stayService.query(filterBy)
+		logger.debug('Getting Stays', filterBy);
+		const stays = await stayService.query(filterBy, page);
 
-		// const stays = await stayService.query()
-		res.json(stays)
+		res.json(stays);
 	} catch (err) {
-		logger.error('Failed to get stays', err)
-		res.status(400).send({ err: 'Failed to get stays' })
+		logger.error('Failed to get stays', err);
+		res.status(400).send({ err: 'Failed to get stays' });
 	}
 }
 
