@@ -17,19 +17,19 @@ export const stayService = {
 	// removeStayMsg,
 }
 
-async function query(filterBy = { txt: '' }) {
-	// async function query() {
+async function query(filterBy = { txt: '' }, page = 0) {
 	try {
-		const criteria = _buildCriteria(filterBy)
+		const criteria = _buildCriteria(filterBy);
+		const PAGE_SIZE = 10;  // Adjust the page size as needed
 
-		const collection = await dbService.getCollection('stay')
-		var stayCursor = await collection.find(criteria)
-		// const stayCursor = await collection.find({}) 
-		const stays = await stayCursor.toArray() //
-		return stays
+		const collection = await dbService.getCollection('stay');
+		var stayCursor = await collection.find(criteria).skip(page * PAGE_SIZE).limit(PAGE_SIZE);
+
+		const stays = await stayCursor.toArray();
+		return stays;
 	} catch (err) {
-		logger.error('cannot find stays', err)
-		throw err
+		logger.error('cannot find stays', err);
+		throw err;
 	}
 }
 
@@ -153,8 +153,8 @@ function _buildCriteria(filterBy) {
 	}
 
 	if (label) {
-        criteria.labels = { $in: [label] }
-    }
+		criteria.labels = { $in: [label] }
+	}
 
 	if (guest) {
 		criteria.capacity = { $gte: guest }
