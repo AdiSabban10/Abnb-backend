@@ -10,6 +10,7 @@ import { orderRoutes } from './api/order/order.routes.js'
 import { stayRoutes } from './api/stay/stay.routes.js'
 // import { setupSocketAPI } from './services/socket.service.js'
 
+import { logger } from './services/logger.service.js'
 import { setupAsyncLocalStorage } from './middlewares/setupAls.middleware.js'
 
 const app = express()
@@ -52,9 +53,8 @@ app.get('/**', (req, res) => {
     res.sendFile(path.resolve('public/index.html'))
 })
 
-import { logger } from './services/logger.service.js'
-const port = process.env.PORT || 3030
 
+const port = process.env.PORT || 3030
 // server.listen(port, () => {
 //     logger.info('Server is running on port: ' + port)
 // })
