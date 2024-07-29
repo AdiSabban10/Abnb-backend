@@ -12,22 +12,16 @@ export const orderService = {
 	update,
 }
 
-// async function query(filterBy = { txt: '' }) {
-async function query() {
+async function query(filterBy = {}) {
+// async function query() {
 	try {
-        // const criteria = _buildCriteria(filterBy)
-        // const sort = _buildSort(filterBy)
+        const criteria = _buildCriteria(filterBy)
 
 		const collection = await dbService.getCollection('order')
-		// var orderCursor = await collection.find(criteria, { sort })
-		const orderCursor = await collection.find({}) 
+		var orderCursor = await collection.find(criteria)
+		// const orderCursor = await collection.find({}) 
 
-		// if (filterBy.pageIdx !== undefined) {
-		// 	orderCursor.skip(filterBy.pageIdx * PAGE_SIZE).limit(PAGE_SIZE)
-		// }
-
-		const orders = await orderCursor.toArray() //
-		// const orders = orderCursor.toArray()
+		const orders = await orderCursor.toArray() 
 		return orders
 	} catch (err) {
 		logger.error('cannot find orders', err)
@@ -99,5 +93,19 @@ async function update(order) {
 		logger.error(`cannot update order ${order._id}`, err)
 		throw err
 	}
+}
+
+function _buildCriteria(filterBy) {
+    const criteria = {}
+
+    if (filterBy.guestId) {
+        criteria['guest._id'] = filterBy.guestId
+    }
+
+    if (filterBy.hostId) {
+        criteria['host._id'] = filterBy.hostId
+    }
+
+    return criteria
 }
 
