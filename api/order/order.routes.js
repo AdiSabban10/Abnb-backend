@@ -7,12 +7,6 @@ import { getOrders, getOrderById, removeOrder, addOrder, updateOrder } from './o
 
 const router = express.Router()
 
-// router.get('/', getOrders)
-// router.get('/:id', getOrderById)
-// router.delete('/:id', removeOrder)
-// router.post('/', addOrder)
-// router.put('/:id', updateOrder)
-
 router.get('/', log, getOrders)
 router.get('/:id', log, getOrderById)
 router.post('/',  log, requireAuth, addOrder)

@@ -32,12 +32,16 @@ export async function getOrderById(req, res) {
 }
 
 export async function addOrder(req, res) {
-	const { loggedinUser, body: order } = req
+	const { loggedinUser } = req
 
 	try {
-		order.guest = loggedinUser
-		const addedOrder = await orderService.add(order)
-		res.json(addedOrder)
+		var order = req.body
+		// order.guestId = loggedinUser._id
+		order = await orderService.add(order)
+
+		socketService.emitToUser({ type: 'order-added', data: order, userId: order.host._id })
+
+		res.send(order)
 	} catch (err) {
 		logger.error('Failed to add order', err)
 		res.status(400).send({ err: 'Failed to add order' })
