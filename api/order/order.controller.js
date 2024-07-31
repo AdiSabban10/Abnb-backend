@@ -38,6 +38,7 @@ export async function addOrder(req, res) {
 		var order = req.body
 		order = await orderService.add(order)
 		socketService.emitToUser({ type: 'order-added', data: order, userId: order.host._id })
+		socketService.emitToUser({ type: 'order-added', data: order, userId: order.guest._id })
 
 		res.send(order)
 	} catch (err) {
