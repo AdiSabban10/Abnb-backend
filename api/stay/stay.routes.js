@@ -3,7 +3,7 @@ import express from 'express'
 import { requireAuth } from '../../middlewares/requireAuth.middleware.js'
 import { log } from '../../middlewares/logger.middleware.js'
 
-import { getStays, getStayById, addStay, updateStay, removeStay } from './stay.controller.js'
+import { getStays, getStayById, addStay, updateStay, removeStay, countStays } from './stay.controller.js'
 
 const router = express.Router()
 
