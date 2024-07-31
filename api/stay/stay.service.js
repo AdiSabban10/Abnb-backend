@@ -17,13 +17,19 @@ export const stayService = {
 	// removeStayMsg,
 }
 
-async function query(filterBy = { txt: '' }, page = 0) {
+async function query(filterBy = { txt: '' }, page = 0, paginate = true) {
 	try {
 		const criteria = _buildCriteria(filterBy);
-		const PAGE_SIZE = 10;  // Adjust the page size as needed
+		const PAGE_SIZE = 30;  // Adjust the page size as needed
 
 		const collection = await dbService.getCollection('stay');
-		var stayCursor = await collection.find(criteria).skip(page * PAGE_SIZE).limit(PAGE_SIZE);
+		let stayCursor;
+
+		if (paginate) {
+			stayCursor = await collection.find(criteria).skip(page * PAGE_SIZE).limit(PAGE_SIZE);
+		} else {
+			stayCursor = await collection.find(criteria);
+		}
 
 		const stays = await stayCursor.toArray();
 		return stays;

@@ -8,13 +8,13 @@ import { authRoutes } from './api/auth/auth.routes.js'
 import { userRoutes } from './api/user/user.routes.js'
 import { orderRoutes } from './api/order/order.routes.js'
 import { stayRoutes } from './api/stay/stay.routes.js'
-// import { setupSocketAPI } from './services/socket.service.js'
+import { setupSocketAPI } from './services/socket.service.js'
 
 import { logger } from './services/logger.service.js'
 import { setupAsyncLocalStorage } from './middlewares/setupAls.middleware.js'
 
 const app = express()
-// const server = http.createServer(app)
+const server = http.createServer(app)
 
 // Express App Config
 app.use(cookieParser())
@@ -42,7 +42,7 @@ app.use('/api/user', userRoutes)
 app.use('/api/order', orderRoutes)
 app.use('/api/stay', stayRoutes)
 
-// setupSocketAPI(server)
+setupSocketAPI(server)
 
 // Make every unhandled server-side-route match index.html
 // so when requesting http://localhost:3030/unhandled-route... 
@@ -53,11 +53,7 @@ app.get('/**', (req, res) => {
     res.sendFile(path.resolve('public/index.html'))
 })
 
-
 const port = process.env.PORT || 3030
-// server.listen(port, () => {
-//     logger.info('Server is running on port: ' + port)
-// })
-app.listen(port, () => {
-    logger.info(`Server listening on port http://127.0.0.1:${port}/`)
+server.listen(port, () => {
+    logger.info('Server is running on port: ' + port)
 })
