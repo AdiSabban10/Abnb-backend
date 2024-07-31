@@ -7,11 +7,11 @@ import { orderService } from './order.service.js'
 export async function getOrders(req, res) {
 	try {
 		const filterBy = {
-            guestId: req.query.guestId || '',
-            hostId: req.query.hostId || ''
-        }
+			guestId: req.query.guestId || '',
+			hostId: req.query.hostId || ''
+		}
 
-        const orders = await orderService.query(filterBy)
+		const orders = await orderService.query(filterBy)
 		// const orders = await orderService.query()
 		res.json(orders)
 	} catch (err) {
@@ -32,13 +32,11 @@ export async function getOrderById(req, res) {
 }
 
 export async function addOrder(req, res) {
-	const { loggedinUser } = req
+	// const { loggedinUser } = req
 
 	try {
 		var order = req.body
-		// order.guestId = loggedinUser._id
 		order = await orderService.add(order)
-console.log('order;', order)
 		socketService.emitToUser({ type: 'order-added', data: order, userId: order.host._id })
 
 		res.send(order)
@@ -49,18 +47,12 @@ console.log('order;', order)
 }
 
 export async function updateOrder(req, res) {
-	// const { loggedinUser, body: order } = req
-	const order = req.body
-    // const { _id: userId, isAdmin } = loggedinUser
-
-    // if(!isAdmin && order.host._id !== userId) {
-    //     res.status(403).send('Not your order...')
-    //     return
-    // }
 
 	try {
-		const updatedOrder = await orderService.update(order)
-		res.json(updatedOrder)
+		var order = req.body
+		order = await orderService.update(order)
+		socketService.emitToUser({ type: 'order-updated', data: order, userId: order.guest._id })
+		res.send(order)
 	} catch (err) {
 		logger.error('Failed to update order', err)
 		res.status(400).send({ err: 'Failed to update order' })
