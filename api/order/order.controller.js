@@ -38,7 +38,7 @@ export async function addOrder(req, res) {
 		var order = req.body
 		// order.guestId = loggedinUser._id
 		order = await orderService.add(order)
-
+console.log('order;', order)
 		socketService.emitToUser({ type: 'order-added', data: order, userId: order.host._id })
 
 		res.send(order)
